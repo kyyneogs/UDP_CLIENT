@@ -5,10 +5,20 @@ UdpClient::UdpClient(){
 }
 
 UdpClient::~UdpClient(){
+    #ifdef _WIN32
+    closesocket(clientSock);
+    #else
     close(clientSock);
+    #endif
 }
 
 int UdpClient::sockInit(){
+    #ifdef _WIN32
+    WSADATA wsaData;
+    WORD version = MAKEWORD(2,2);
+    WSAStartup(version, &wsaData);
+    #endif
+
     clientSock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (clientSock == -1)
         return 1;
@@ -29,7 +39,7 @@ void UdpClient::setPort(int port){
 }
 
 void UdpClient::sendMessage(std::string msg){
-    ssize_t sendSucc = sendto(clientSock, msg.c_str(), msg.length(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+    sendSucc = sendto(clientSock, msg.c_str(), msg.length(), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
     if (sendSucc == -1){
         std::cout << "send failed.";
     }
