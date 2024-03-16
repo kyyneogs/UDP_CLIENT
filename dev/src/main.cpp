@@ -1,4 +1,4 @@
-#include "../include/client.hpp"
+#include <client.h>
 
 int main(){
     UdpClient client;

@@ -1,4 +1,4 @@
-#include "../include/client.hpp"
+#include <client.h>
 
 UdpClient::UdpClient(){
     memset(&serverAddr, 0, sizeof(serverAddr));
